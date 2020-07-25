@@ -3,9 +3,9 @@ Just a little repo to store my files for the Automate Boring Stuff course
 
 ## What is Automate The Boring Stuff?
 
-Automate The Boring Stuff is a brilliant beginners course on Python basics, teaching noobs like me how to run basic programs, build functions, and interact with other software in python
+Automate The Boring Stuff is a brilliant beginners course on Python basics, teaching noobs like me how to write/run basic programs, build functions, and interact with other software in Python
 
-## Where can I see it for myself? 
+## Cool! Where can I read it for myself? 
 
 Good question! 
 A quick Google will reveal any number of links, but this is the one I used: https://automatetheboringstuff.com/#toc
