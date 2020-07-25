@@ -1,4 +1,4 @@
-# AutomateTheBoringStuff
+# Automate The Boring Stuff
 Just a little repo to store my files for the Automate Boring Stuff course
 
 ## What is Automate The Boring Stuff?
