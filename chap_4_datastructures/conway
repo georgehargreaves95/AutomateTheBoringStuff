@@ -10,91 +10,95 @@ Don't really want to define static values for width and height, but for the mome
 I'm thinking I could define a class and pass the values as constructor values but I'm not sure how to do that 
 yet.
 
+UPDATE: Set up a class! However, this still doesn't seem very elegant. 
+A different paradigm would perhaps be more appropriate
+
+
 '''
 
-WIDTH = 40
-HEIGHT = 10
 
-# Create a list for the cells
-next_cells = []
+class ConwayGame:
 
+    def __init__(self, width, height, init_cells):
+        self.WIDTH = width
+        self.HEIGHT = height
+        self.next_cells = init_cells
 
-def create_initial_cells():
-    for x in range(WIDTH):
-        column = []  # Create a new column
-        for y in range(HEIGHT):
-            if random.randint(0, 1) == 0:
-                column.append("#")  # Add a living Cell
-            else:
-                column.append(' ')  # Add a dead Cell
-        next_cells.append(column)  # next_cells list is a list of columns
+    def create_initial_cells(self):
+        for x in range(self.WIDTH):
+            column = []  # Create a new column
+            for y in range(self.HEIGHT):
+                if random.randint(0, 1) == 0:
+                    column.append("#")  # Add a living Cell
+                else:
+                    column.append(' ')  # Add a dead Cell
+            self.next_cells.append(column)  # next_cells list is a list of columns
 
-    print_game_state()
+    def print_game_state(self):
 
+        print('\n\n\n\n\n')  # Separate each step with new lines
+        current_cells = copy.deepcopy(self.next_cells)
 
-def print_game_state():
-    print('\n\n\n\n\n')  # Separate each step with new lines
-    current_cells = copy.deepcopy(next_cells)
+        for y in range(self.HEIGHT):
+            for x in range(self.WIDTH):
+                print(current_cells[x][y], end='')  # Print the # or the space
+            print()  # Print a fresh line at the end of the row
 
-    for y in range(HEIGHT):
-        for x in range(WIDTH):
-            print(current_cells[x][y], end='')  # Print the # or the space
-        print()  # Print a fresh line at the end of the row
+        self.calculate_cell_states(current_cells)
 
-    calculate_cell_states(current_cells)
+    # Calculate the next step's cells based on the current step's cells
+    def calculate_cell_states(self, current_cells):
 
+        for x in range(self.WIDTH):
+            for y in range(self.HEIGHT):
+                # Get neighbouring coordinates
+                # `% WIDTH` ensures left_coord id always between 0:WIDTH-1
+                left_coord = (x - 1) % self.WIDTH
+                right_coord = (x + 1) % self.WIDTH
+                above_coord = (y - 1) % self.HEIGHT
+                below_coord = (y + 1) % self.HEIGHT
 
-# Calculate the next step's cells based on the current step's cells
-def calculate_cell_states(current_cells):
-    for x in range(WIDTH):
-        for y in range(HEIGHT):
-            # Get neighbouring coordinates
-            # `% WIDTH` ensures left_coord id always between 0:WIDTH-1
-            left_coord = (x - 1) % WIDTH
-            right_coord = (x + 1) % WIDTH
-            above_coord = (y - 1) % HEIGHT
-            below_coord = (y + 1) % HEIGHT
+                # Count the number of living neighbours
+                num_neighbours = 0
+                if current_cells[left_coord][above_coord] == '#':
+                    num_neighbours += 1
+                if current_cells[x][above_coord] == '#':
+                    num_neighbours += 1
+                if current_cells[right_coord][above_coord] == '#':
+                    num_neighbours += 1
+                if current_cells[left_coord][y] == '#':
+                    num_neighbours += 1
+                if current_cells[right_coord][y] == '#':
+                    num_neighbours += 1
+                if current_cells[left_coord][below_coord] == '#':
+                    num_neighbours += 1
+                if current_cells[x][below_coord] == '#':
+                    num_neighbours += 1
+                if current_cells[right_coord][below_coord] == '#':
+                    num_neighbours += 1
 
-            # Count the number of living neighbours
-            num_neighbours = 0
-            if current_cells[left_coord][above_coord] == '#':
-                num_neighbours += 1
-            if current_cells[x][above_coord] == '#':
-                num_neighbours += 1
-            if current_cells[right_coord][above_coord] == '#':
-                num_neighbours += 1
-            if current_cells[left_coord][y] == '#':
-                num_neighbours += 1
-            if current_cells[right_coord][y] == '#':
-                num_neighbours += 1
-            if current_cells[left_coord][below_coord] == '#':
-                num_neighbours += 1
-            if current_cells[x][below_coord] == '#':
-                num_neighbours += 1
-            if current_cells[right_coord][below_coord] == '#':
-                num_neighbours += 1
-
-            # Set cell count based on Game rules
-            if current_cells[x][y] == '#' and (num_neighbours == 2 or num_neighbours == 3):
-                # Living cells with 2 or 3 living neighbours stay alive
-                next_cells[x][y] = '#'
-            elif current_cells[x][y] == ' ' and num_neighbours == 3:
-                # Dead cells come alive with 3 neighbours
-                next_cells[x][y] = '#'
-            else:
-                next_cells[x][y] = ' '
+                # Set cell count based on Game rules
+                if current_cells[x][y] == '#' and (num_neighbours == 2 or num_neighbours == 3):
+                    # Living cells with 2 or 3 living neighbours stay alive
+                    self.next_cells[x][y] = '#'
+                elif current_cells[x][y] == ' ' and num_neighbours == 3:
+                    # Dead cells come alive with 3 neighbours
+                    self.next_cells[x][y] = '#'
+                else:
+                    self.next_cells[x][y] = ' '
 
 
 def __main__():
-
     if __name__ == '__main__':
-        create_initial_cells()
-        i = 0
-        while i < 15:  # Main loop
+        width = int(input("Enter a width: "))
+        height = int(input("Enter a height: "))
+        loop = int(input("Enter a loop limit: "))
+        conway = ConwayGame(width=width, height=height, init_cells=[])
+        conway.create_initial_cells()
+        for i in range(loop):  # Main loop
             # Print the current cells on the screen
-            print_game_state()
+            conway.print_game_state()
             time.sleep(1)
-            i += 1
 
 
 __main__()
